@@ -1,12 +1,14 @@
 :root {
-    --purple-dark: #5f0f40;
-    --red-dark: #9a031e;
-    --orange: #fb8b24;
-    --orange-dark: #e36414;
-    --blue-dark: #0f4c5c;
-    --tictactoe: 475px;
-    --tictactoe-square: calc(var(--tictactoe) / 3);
-    --tictactoe-square-item: calc(var(--tictactoe-square) - 2rem);
+    --background: #5f0f40;
+    --text: whitesmoke;
+    --square: #fb8b24;
+    --darkSquare: #e36414;
+    --circle: #0f4c5c;
+    --cross: #9a031e;
+    --game-board: 400px;
+    --game-board-square: calc(var(--game-board) / 3);
+    --game-board-square-item: calc(var(--game-board-square) - 2rem);
+    --game-board-square-item-width: 1.75rem;
 }
 
 *,
@@ -22,36 +24,138 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    flex-direction: column;
-    background-color: var(--purple-dark);
+    color: var(--text);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+    background-color: var(--background);
 }
 
-#tictactoe {
-    width: var(--tictactoe);
-    height: var(--tictactoe);
-    display: flex;
-    flex-wrap: wrap;
+button {
+    width: 50%;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    color: var(--text);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 1);
+    background-color: var(--square);
+    border: 0.3rem solid rgba(0, 0, 0, 0);
+    border-radius: 1rem;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 1px 1px rgba(245, 245, 245, 0.7);
+    -moz-box-shadow: 0px 0px 1px 1px rgba(245, 245, 245, 0.7);
+    box-shadow: 0px 0px 1px 1px rgba(245, 245, 245, 0.7);
+    transition: all .3s;
 }
 
-.tictactoe-square {
-    width: var(--tictactoe-square);
-    height: var(--tictactoe-square);
+button:hover {
+    background-color: var(--darkSquare);
+    border-color: rgba(15, 76, 92, 1);
+}
+
+button:disabled {
+    background-color: gray;
+    border-color: rgba(0, 0, 0, 0);
+    cursor: default;
+}
+
+.button-big {
+    width: 100%;
+}
+
+.button-small {
+    transform: scale(0.95);
+}
+
+#tic-tac-toe {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--orange);
-    border: 3px solid var(--purple-dark);
+    flex-direction: column;
+}
+
+.score-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--game-board);
+    margin-bottom: 1rem;
+    font-size: 3rem;
+    font-weight: bold;
+    background-color: var(--square);
+    border-radius: 4rem 4rem 0 0;
+    -webkit-box-shadow: 0px 0px 1px 1px rgba(245, 245, 245, 0.7);
+    -moz-box-shadow: 0px 0px 1px 1px rgba(245, 245, 245, 0.7);
+    box-shadow: 0px 0px 1px 1px rgba(245, 245, 245, 0.7);
+}
+
+.game-box {
+    display: flex;
+    flex-wrap: wrap;
+    width: var(--game-board);
+    height: var(--game-board);
+}
+
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: var(--game-board-square);
+    height: var(--game-board-square);
+    background-color: var(--square);
+    border: 0.25rem solid var(--background);
     border-radius: 1rem;
+    transition: all .4s;
 }
 
-.tictactoe-square-circle {
-    width: var(--tictactoe-square-item);
-    height: var(--tictactoe-square-item);
+.square:hover {
+    background-color: var(--darkSquare);
+    border: 0.15rem solid whitesmoke;
+    cursor: pointer;
+}
+
+.circle {
+    width: var(--game-board-square-item);
+    height: var(--game-board-square-item);
+    border: var(--game-board-square-item-width) solid var(--circle);
     border-radius: 50%;
-    border: 1rem solid var(--blue-dark);
 }
 
-.tictactoe-square-cross {
-    width: var(--tictactoe-square-item);
-    height: var(--tictactoe-square-item);
+.cross {
+    position: relative;
+    width: var(--game-board-square-item);
+    height: var(--game-board-square-item);
+}
+
+.cross::before,
+.cross::after {
+    content: "";
+    position: absolute;
+    background-color: var(--cross);
+    transform: rotate(45deg);
+}
+
+.cross::before {
+    left: 50%;
+    width: var(--game-board-square-item-width);
+    height: 100%;
+    margin-left: calc(var(--game-board-square-item-width) / 2 * -1);
+}
+
+.cross::after {
+    top: 50%;
+    width: 100%;
+    height: var(--game-board-square-item-width);
+    margin: calc(var(--game-board-square-item-width) / 2 * -1) 0 0 -50%;
+}
+
+.small {
+    transform: scale(0.6);
+}
+
+.reset-box {
+    display: flex;
+    justify-content: space-around;
+    width: var(--game-board);
+    margin-top: 1rem;
 }

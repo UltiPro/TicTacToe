@@ -101,7 +101,6 @@ class TicTacToe {
             this.#gameBox.append(new TicTacToeCell(idx, this.#gameData).Get());
         });
         this.#ticTacToe.append(this.#gameBox);
-        //tutaj
         this.#resetBox = document.createElement("div");
         this.#resetBox.classList.add("reset-box");
         this.#resetBox.innerHTML = `
@@ -112,7 +111,6 @@ class TicTacToe {
         document.querySelector(".reset-box button:nth-child(2)").addEventListener("click", () => {
             location.reload();
         });
-        //tutaj
         this.StartGame(playerMode);
     }
 

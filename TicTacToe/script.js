@@ -1,98 +1,95 @@
 class TicTacToeCell {
-    #DOMElement;
+    #domElement;
+    #seted;
 
-    constructor(idx, shape) {
-        this.#DOMElement = document.createElement("div");
-        this.#DOMElement.classList.add("tic-tac-toe-game-square");
-        this.#DOMElement.id = "tic-tac-toe-game-square-cell-" + idx;
-        this.#DOMElement.addEventListener("click", () => {
-            this.Set(shape.turn);
-            shape.turn = !shape.turn;
-        });
-        this.#DOMElement.appendChild(document.createElement("div"));
+    constructor(idx, gameData) {
+        this.#domElement = document.createElement("div");
+        this.#domElement.classList.add("square");
+        this.#domElement.setAttribute("data-square-cell", idx); //to?
+        this.#domElement.addEventListener("click", () => { this.Set(gameData); });
+        this.#domElement.appendChild(document.createElement("div"));
+        this.#seted = false;
     }
 
-    Get = () => this.#DOMElement;
+    Get = () => this.#domElement;
 
-    Set = (shape) => {
-        if (shape == true) this.#DOMElement.children[0].classList.add("tic-tac-toe-game-square-circle");
-        else this.#DOMElement.children[0].classList.add("tic-tac-toe-game-square-cross");
+    Set = (gameData) => {
+        if (this.#seted) return;
+        if (gameData.crossTurn) this.#domElement.children[0].classList.add("cross");
+        else this.#domElement.children[0].classList.add("circle");
+        gameData.crossTurn = !gameData.crossTurn;
+        this.#seted = true;
     }
 
-    Hide = () => {
-        this.#DOMElement.children[0].classList.remove("tic-tac-toe-game-square-circle");
-        this.#DOMElement.children[0].classList.remove("tic-tac-toe-game-square-cross");
+    Clear = () => {
+        this.#domElement.children[0].classList.remove("cross");
+        this.#domElement.children[0].classList.remove("circle");
+        this.#seted = false;
     }
 }
 
 class TicTacToe {
     #ticTacToe;
-    #ticTacToeGamePlayerBtn;
-    #ticTacToeGameComputerBtn;
-    #ticTacToeScore;
-    #ticTacToeScoreCross;
-    #ticTacToeScoreCircle;
-    #ticTacToeGame;
-    #ticTacToeReset;
-    #ticTacToeResetPlay;
-    #ticTacToeResetReset;
-    #cells;
-    #shapeTurn;
-    #crossScore;
-    #circleScore;
+    #gameModePlayerBtn;
+    #gameModeComputerBtn;
+    #scoreBox;
+    #scoreCross;
+    #scoreCircle;
+    #gameBox;
+    #gameData;
+    #resetBox;
 
     constructor() {
         this.#ticTacToe = document.getElementById("tic-tac-toe");
-        this.#cells = [null, null, null, null, null, null, null, null, null];
-        this.#shapeTurn = { crossTurn: true };
-        this.#crossScore = this.#circleScore = 0;
+        this.#scoreCross = this.#scoreCircle = 0;
+        this.#gameData = {
+            cells: [null, null, null, null, null, null, null, null, null],
+            crossTurn: true
+        };
     }
 
     Init() {
-        this.#ticTacToeGamePlayerBtn = document.createElement("button");
-        this.#ticTacToeGamePlayerBtn.classList.add("tic-tac-toe-btn");
-        this.#ticTacToeGamePlayerBtn.innerHTML = "Player Mode";
-        this.#ticTacToeGamePlayerBtn.addEventListener("click", () => this.LunchGame(true));
-        this.#ticTacToeGameComputerBtn = document.createElement("button");
-        this.#ticTacToeGameComputerBtn.classList.add("tic-tac-toe-btn");
-        this.#ticTacToeGameComputerBtn.innerHTML = "Computer Mode";
-        this.#ticTacToeGameComputerBtn.addEventListener("click", () => this.LunchGame(false));
-        this.#ticTacToe.append(this.#ticTacToeGamePlayerBtn);
-        this.#ticTacToe.append(this.#ticTacToeGameComputerBtn);
+        this.#gameModePlayerBtn = document.createElement("button");
+        this.#gameModePlayerBtn.classList.add("button-big");
+        this.#gameModePlayerBtn.innerHTML = "Player Mode";
+        this.#gameModePlayerBtn.addEventListener("click", () => this.LunchGame(true));
+        this.#gameModeComputerBtn = document.createElement("button");
+        this.#gameModeComputerBtn.classList.add("button-big");
+        this.#gameModeComputerBtn.innerHTML = "Computer Mode";
+        this.#gameModeComputerBtn.addEventListener("click", () => this.LunchGame(false));
+        this.#ticTacToe.append(this.#gameModePlayerBtn);
+        this.#ticTacToe.append(this.#gameModeComputerBtn);
     }
 
     LunchGame(playerMode) {
-        this.#ticTacToe.removeChild(this.#ticTacToeGamePlayerBtn);
-        this.#ticTacToe.removeChild(this.#ticTacToeGameComputerBtn);
-        this.#ticTacToeScore = document.createElement("div");
-        this.#ticTacToeScore.classList.add("tic-tac-toe-score");
-        this.#ticTacToeScore.innerHTML = `
-            <div class="tic-tac-toe-game-square-cross" style="transform: scale(0.6) rotate(45deg);"></div>
+        this.#ticTacToe.removeChild(this.#gameModePlayerBtn);
+        this.#ticTacToe.removeChild(this.#gameModeComputerBtn);
+        this.#scoreBox = document.createElement("div");
+        this.#scoreBox.classList.add("score-box");
+        this.#scoreBox.innerHTML = `
+            <div class="cross small"></div>
             <div>
-                <span id="tic-tac-toe-score-cross">0</span>
-                <span>:</span>
-                <span id="tic-tac-toe-score-circle">0</span>
+                <span id="score-cross">0</span> : <span id="score-circle">0</span>
             </div>
-            <div class="tic-tac-toe-game-square-circle" style="transform: scale(0.6);"></div>
+            <div class="circle small"></div>
         `;
-        this.#ticTacToeScoreCross = document.getElementById("tic-tac-toe-score-cross");
-        this.#ticTacToeScoreCircle = document.getElementById("tic-tac-toe-score-circle");
-        this.#ticTacToe.append(this.#ticTacToeScore);
-        this.#ticTacToeGame = document.createElement("div");
-        this.#ticTacToeGame.classList.add("tic-tac-toe-game");
-        this.#cells.forEach((_, idx) => {
-            this.#ticTacToeGame.append(new TicTacToeCell(idx, this.#shapeTurn).Get());
+        this.#scoreCross = document.getElementById("score-cross");
+        this.#scoreCircle = document.getElementById("score-circle");
+        this.#ticTacToe.append(this.#scoreBox);
+        this.#gameBox = document.createElement("div");
+        this.#gameBox.classList.add("game-box");
+        this.#gameData.cells.forEach((_, idx) => {
+            this.#gameBox.append(new TicTacToeCell(idx, this.#gameData).Get());
         });
-        this.#ticTacToe.append(this.#ticTacToeGame);
-        this.#ticTacToeReset = document.createElement("div");
-        this.#ticTacToeReset.classList.add("tic-tac-toe-reset");
-        this.#ticTacToeReset.innerHTML = `
-            <button id="tic-tac-toe-reset-play" class="tic-tac-toe-btn" style="width: 47%; margin-right: 5%;">Play again</button>
-            <button id="tic-tac-toe-reset-reset" class="tic-tac-toe-btn" style="width: 47%">Change Mode</button>
+        this.#ticTacToe.append(this.#gameBox);
+        this.#resetBox = document.createElement("div");
+        this.#resetBox.classList.add("reset-box");
+        this.#resetBox.innerHTML = `
+            <button class="button-small" disabled>Play again</button>
+            <button class="button-small">Change Mode</button>
         `;
-        this.#ticTacToeResetPlay = document.getElementById("tic-tac-toe-reset-play");
-        this.#ticTacToe.append(this.#ticTacToeReset);
-        document.getElementById("tic-tac-toe-reset-reset").addEventListener("click", () => {
+        this.#ticTacToe.append(this.#resetBox);
+        document.querySelector(".reset-box button:nth-child(2)").addEventListener("click", () => {
             location.reload();
         });
     }

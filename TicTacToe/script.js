@@ -14,7 +14,7 @@ class TicTacToeCell {
     Get = () => this.#domElement;
 
     Set = (idx, gameData) => {
-        if (this.#seted) return;
+        if (this.#seted || !gameData.gameStarted) return;
         if (gameData.crossTurn) this.#domElement.children[0].classList.add("cross");
         else this.#domElement.children[0].classList.add("circle");
         gameData.cells[idx] = gameData.crossTurn;
@@ -42,6 +42,7 @@ class TicTacToe {
     #scoreCircleSpan;
     #gameBox;
     #gameData; //tutaj
+    #gameCellsObjects; // to
     #gameWinningCombinations = [
         [0, 1, 2],
         [3, 4, 5],
@@ -54,6 +55,7 @@ class TicTacToe {
     ];
     #gameWinningCombination; // to
     #resetBox; //tutaj
+    #resetPlayAgain; //to
 
     constructor() {
         this.#ticTacToe = document.getElementById("tic-tac-toe");
@@ -64,6 +66,7 @@ class TicTacToe {
             crossTurn: true,
             event: null
         };
+        this.#gameCellsObjects = [null, null, null, null, null, null, null, null, null]; // to
         this.#gameWinningCombination = null; // to
     }
 
@@ -97,8 +100,10 @@ class TicTacToe {
         this.#scoreCircleSpan = document.getElementById("score-circle");
         this.#gameBox = document.createElement("div");
         this.#gameBox.classList.add("game-box");
-        this.#gameData.cells.forEach((_, idx) => {
-            this.#gameBox.append(new TicTacToeCell(idx, this.#gameData).Get());
+        this.#gameData.cells.forEach((_, idx) => { // to
+            const cell = new TicTacToeCell(idx, this.#gameData)
+            this.#gameCellsObjects[idx] = cell;
+            this.#gameBox.append(cell.Get());
         });
         this.#ticTacToe.append(this.#gameBox);
         this.#resetBox = document.createElement("div");
@@ -108,6 +113,7 @@ class TicTacToe {
             <button class="button-small">Change Mode</button>
         `;
         this.#ticTacToe.append(this.#resetBox);
+        this.#resetPlayAgain = document.querySelector(".reset-box button:nth-child(1)"); // to
         document.querySelector(".reset-box button:nth-child(2)").addEventListener("click", () => {
             location.reload();
         });
@@ -132,7 +138,12 @@ class TicTacToe {
                     this.#scoreCircleSpan.innerText = this.#scoreCircle;
                 }
                 this.#gameData.gameStarted = false;
+                this.#resetPlayAgain.removeAttribute("disabled");
+                this.#resetPlayAgain.addEventListener("click", () => {
+                    this.Reset();
+                });
             }
+            //draw
         };
         GameHandler.bind(this);
         this.#gameData.event = GameHandler;
@@ -149,8 +160,9 @@ class TicTacToe {
 
     CheckWin() {
         for (const comb of this.#gameWinningCombinations) {
-            if (this.#gameData.cells[comb[0]] == this.#gameData.cells[comb[1]] ==
-                this.#gameData.cells[comb[2]] && this.#gameData.cells[comb[0]] != null
+            if (this.#gameData.cells[comb[0]] == this.#gameData.cells[comb[1]] &&
+                this.#gameData.cells[comb[1]] == this.#gameData.cells[comb[2]] &&
+                this.#gameData.cells[comb[0]] != null
             ) {
                 this.#gameWinningCombination = comb;
                 return true;
@@ -158,6 +170,21 @@ class TicTacToe {
         }
         return false;
     }
+
+    //tutaj
+    Reset() {
+        this.#gameData.gameStarted = true;
+        this.#gameData.cells.forEach((_, idx) => {
+            this.#gameData.cells[idx] = null;
+            this.#gameCellsObjects[idx].Clear();
+        });
+        this.#gameData.crossTurn; //to
+        this.#resetPlayAgain.setAttribute("disabled", true);
+        this.#resetPlayAgain.removeEventListener("click", () => {
+            this.Reset();
+        });
+    }
+    //tutaj
 }
 
 const ticTacToe = new TicTacToe();

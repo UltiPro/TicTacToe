@@ -22,6 +22,8 @@ export class TicTacToeReset {
         });
     }
 
+    #ClickPlayAgainEvent = () => this.#ticTacToe.Reset()
+
     ActivePlayAgain() {
         this.#playAgainBtn.removeAttribute("disabled");
         this.#playAgainBtn.addEventListener("click", this.#ClickPlayAgainEvent);
@@ -31,6 +33,4 @@ export class TicTacToeReset {
         this.#playAgainBtn.setAttribute("disabled", true);
         this.#playAgainBtn.removeEventListener("click", this.#ClickPlayAgainEvent);
     }
-
-    #ClickPlayAgainEvent = () => this.#ticTacToe.Reset()
 }

@@ -10,7 +10,7 @@ export class TicTacToe {
 
     constructor() {
         this.#mainDiv = document.getElementById("tic-tac-toe");
-        this.#ticTacToeScore = new TicTacToeScore(this, this.#mainDiv);
+        this.#ticTacToeScore = new TicTacToeScore(this.#mainDiv);
         this.#ticTacToeGame = new TicTacToeGame(this, this.#mainDiv);
         this.#ticTacToeReset = new TicTacToeReset(this, this.#mainDiv);
     }

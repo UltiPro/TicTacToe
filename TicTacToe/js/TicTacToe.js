@@ -10,10 +10,16 @@ export class TicTacToe {
 
     constructor() {
         this.#mainDiv = document.getElementById("tic-tac-toe");
-        this.#ticTacToeScore = new TicTacToeScore(this);
-        this.#ticTacToeGame = new TicTacToeGame(this);
-        this.#ticTacToeReset = new TicTacToeReset(this);
+        this.#ticTacToeScore = new TicTacToeScore(this, this.#mainDiv);
+        this.#ticTacToeGame = new TicTacToeGame(this, this.#mainDiv);
+        this.#ticTacToeReset = new TicTacToeReset(this, this.#mainDiv);
     }
+
+    get TicTacToeScore() { return this.#ticTacToeScore; }
+
+    get TicTacToeGame() { return this.#ticTacToeGame; }
+
+    get TicTacToeReset() { return this.#ticTacToeReset; }
 
     Init() {
         const playerModeBtn = document.createElement("button");

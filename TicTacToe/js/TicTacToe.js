@@ -19,16 +19,16 @@ export class TicTacToe {
         const playerModeBtn = document.createElement("button");
         playerModeBtn.classList.add("button-big");
         playerModeBtn.innerHTML = "Player Mode";
-        playerModeBtn.addEventListener("click", () => this.InitGame(true));
+        playerModeBtn.addEventListener("click", () => this.#InitGame(true));
         const computerModeBtn = document.createElement("button");
         computerModeBtn.classList.add("button-big");
         computerModeBtn.innerHTML = "Computer Mode";
-        computerModeBtn.addEventListener("click", () => this.InitGame(false));
+        computerModeBtn.addEventListener("click", () => this.#InitGame(false));
         this.mainDiv.append(playerModeBtn);
         this.mainDiv.append(computerModeBtn);
     }
 
-    InitGame(playerMode) {
+    #InitGame(playerMode) {
         this.mainDiv.removeChild(this.mainDiv.childNodes[0]);
         this.mainDiv.removeChild(this.mainDiv.childNodes[0]);
         this.ticTacToeScore.Init();

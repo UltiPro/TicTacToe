@@ -1,10 +1,10 @@
 export class TicTacToeScore {
-    #ticTacToe;
+    #mainDiv;
     #scoreCross;
     #scoreCircle;
 
-    constructor(ticTacToe) {
-        this.#ticTacToe = ticTacToe;
+    constructor(mainDiv) {
+        this.#mainDiv = mainDiv;
     }
 
     Init() {
@@ -17,7 +17,7 @@ export class TicTacToeScore {
             </div>
             <div class="circle small"></div>
         `;
-        this.#ticTacToe.mainDiv.append(scoreBox);
+        this.#mainDiv.append(scoreBox);
         this.#scoreCross = document.getElementById("score-cross");
         this.#scoreCircle = document.getElementById("score-circle");
     }

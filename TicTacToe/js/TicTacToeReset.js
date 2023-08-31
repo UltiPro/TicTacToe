@@ -1,11 +1,11 @@
 export class TicTacToeReset {
     #ticTacToe;
-    #mainDOMElement
+    #mainDiv;
     #playAgainBtn;
 
-    constructor(ticTacToe, mainDOMElement) {
+    constructor(ticTacToe, mainDiv) {
         this.#ticTacToe = ticTacToe;
-        this.#mainDOMElement = mainDOMElement;
+        this.#mainDiv = mainDiv;
     }
 
     Init() {
@@ -15,7 +15,7 @@ export class TicTacToeReset {
             <button class="button-small" disabled>Play Again</button>
             <button class="button-small">Change Mode</button>
         `;
-        this.#mainDOMElement.append(resetBox);
+        this.#mainDiv.append(resetBox);
         this.#playAgainBtn = document.querySelector(".reset-box button:nth-child(1)");
         document.querySelector(".reset-box button:nth-child(2)").addEventListener("click", () => {
             location.reload();
@@ -24,13 +24,13 @@ export class TicTacToeReset {
 
     ActivePlayAgain() {
         this.#playAgainBtn.removeAttribute("disabled");
-        this.#playAgainBtn.addEventListener("click", this.ClickPlayAgainEvent);
+        this.#playAgainBtn.addEventListener("click", this.#ClickPlayAgainEvent);
     }
 
     DisablePlayAgain() {
         this.#playAgainBtn.setAttribute("disabled", true);
-        this.#playAgainBtn.removeEventListener("click", this.ClickPlayAgainEvent);
+        this.#playAgainBtn.removeEventListener("click", this.#ClickPlayAgainEvent);
     }
 
-    ClickPlayAgainEvent = () => this.#ticTacToe.Reset()
+    #ClickPlayAgainEvent = () => this.#ticTacToe.Reset()
 }

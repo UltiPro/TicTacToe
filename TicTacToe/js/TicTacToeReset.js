@@ -22,15 +22,15 @@ export class TicTacToeReset {
         });
     }
 
-    #ClickPlayAgainEvent = () => this.#ticTacToe.Reset()
+    #ClickPlayAgain = () => this.#ticTacToe.TicTacToeGame.Reset();
 
     ActivePlayAgain() {
         this.#playAgainBtn.removeAttribute("disabled");
-        this.#playAgainBtn.addEventListener("click", this.#ClickPlayAgainEvent);
+        this.#playAgainBtn.addEventListener("click", this.#ClickPlayAgain);
     }
 
     DisablePlayAgain() {
-        this.#playAgainBtn.setAttribute("disabled", true);
-        this.#playAgainBtn.removeEventListener("click", this.#ClickPlayAgainEvent);
+        this.#playAgainBtn.setAttribute("disabled", "");
+        this.#playAgainBtn.removeEventListener("click", this.#ClickPlayAgain);
     }
 }

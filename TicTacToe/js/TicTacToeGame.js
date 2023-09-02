@@ -5,6 +5,7 @@ export class TicTacToeGame {
     #mainDiv;
     #cells;
     #gameData;
+    #playerMode;
     #gameWinningCombinations = [
         [0, 1, 2],
         [3, 4, 5],
@@ -17,7 +18,6 @@ export class TicTacToeGame {
     ];
     #gameWinningCombination;
     #lastTurn;
-    #playerMode;
 
     constructor(ticTacToe, mainDiv) {
         this.#ticTacToe = ticTacToe;
@@ -42,7 +42,7 @@ export class TicTacToeGame {
 
     StartGame(playerMode) {
         this.#playerMode = playerMode;
-        if (playerMode) this.#StartGamePlayer();
+        if (this.#playerMode) this.#StartGamePlayer();
         else this.#StartGameComputer();
     }
 
@@ -51,16 +51,16 @@ export class TicTacToeGame {
         this.#gameData.event = GameHandler;
     }
 
+    //tutaj
     #StartGameComputer() {
         const GameHandler = () => {
-            if (!this.#gameData.crossTurn) {
-                const possibleMoves = [];
-                this.#cells.forEach((e, idx) => {
-                    if (e.Value == null) possibleMoves.append(idx);
-                });
-                this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].Click();
-            }
             this.#MainGameHandler();
+            const possibleMoves = [];
+            this.#cells.forEach((e, idx) => {
+                if (e.Value == null) possibleMoves.push(idx);
+            });
+            if (possibleMoves.length > 0) this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].ClickByComputer(this.#gameData);
+            if (this.#gameData.gameStarted) this.#MainGameHandler();
         };
         this.#gameData.event = GameHandler;
     }
@@ -69,10 +69,14 @@ export class TicTacToeGame {
         if (this.#CheckWin()) {
             if (this.#cells[this.#gameWinningCombination[0]].Value) this.#ticTacToe.TicTacToeScore.CrossWin();
             else this.#ticTacToe.TicTacToeScore.CircleWin();
+            this.#cells[this.#gameWinningCombination[0]].SetActive();
+            this.#cells[this.#gameWinningCombination[1]].SetActive();
+            this.#cells[this.#gameWinningCombination[2]].SetActive();
             this.#StopGame();
         }
         else if (this.#CheckDraw()) this.#StopGame();
     }
+    //tutaj
 
     #CheckWin() {
         for (const comb of this.#gameWinningCombinations) {
@@ -109,7 +113,7 @@ export class TicTacToeGame {
         this.#gameData.crossTurn = this.#lastTurn = !this.#lastTurn;
         this.#ticTacToe.TicTacToeReset.DisablePlayAgain();
         if (!this.#playerMode && !this.#gameData.crossTurn) {
-            this.#cells[Math.floor(Math.random() * this.#cells.length)].Click();
+            this.#cells[Math.floor(Math.random() * this.#cells.length)].ClickByComputer();
         }
     }
 }

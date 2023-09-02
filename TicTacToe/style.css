@@ -8,7 +8,7 @@
     --game-board: 400px;
     --game-board-square: calc(var(--game-board) / 3);
     --game-board-square-item: calc(var(--game-board-square) - 2rem);
-    --game-board-square-item-width: 1.75rem;
+    --shape-width: 1.75rem;
 }
 
 *,
@@ -117,7 +117,7 @@ button:disabled {
 .circle {
     width: var(--game-board-square-item);
     height: var(--game-board-square-item);
-    border: var(--game-board-square-item-width) solid var(--circle);
+    border: var(--shape-width) solid var(--circle);
     border-radius: 50%;
 }
 
@@ -137,16 +137,16 @@ button:disabled {
 
 .cross::before {
     left: 50%;
-    width: var(--game-board-square-item-width);
+    width: var(--shape-width);
     height: 100%;
-    margin-left: calc(var(--game-board-square-item-width) / 2 * -1);
+    margin-left: calc(var(--shape-width) / 2 * -1);
 }
 
 .cross::after {
     top: 50%;
     width: 100%;
-    height: var(--game-board-square-item-width);
-    margin: calc(var(--game-board-square-item-width) / 2 * -1) 0 0 -50%;
+    height: var(--shape-width);
+    margin: calc(var(--shape-width) / 2 * -1) 0 0 -50%;
 }
 
 .small {

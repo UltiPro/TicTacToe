@@ -112,6 +112,11 @@ button:disabled {
     transition: all .4s;
 }
 
+.square-active {
+    background-color: var(--darkSquare);
+    border: 0.15rem solid var(--text);
+}
+
 .square:hover {
     background-color: var(--darkSquare);
     border: 0.15rem solid whitesmoke;

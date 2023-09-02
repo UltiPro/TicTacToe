@@ -67,6 +67,10 @@ button:disabled {
     transform: scale(0.95);
 }
 
+.button-slow {
+    transition: background-color 1.2s;
+}
+
 #tic-tac-toe {
     display: flex;
     justify-content: center;

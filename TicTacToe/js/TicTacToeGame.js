@@ -3,7 +3,8 @@ import { TicTacToeCell } from './TicTacToeCell.js';
 export class TicTacToeGame {
     #ticTacToe;
     #mainDiv;
-    #gameData; //tutaj
+    #cells;
+    #gameData;
     #gameWinningCombinations = [
         [0, 1, 2],
         [3, 4, 5],
@@ -15,73 +16,69 @@ export class TicTacToeGame {
         [2, 4, 6]
     ];
     #gameWinningCombination;
+    #lastTurn;
+    #playerMode;
 
     constructor(ticTacToe, mainDiv) {
         this.#ticTacToe = ticTacToe;
         this.#mainDiv = mainDiv;
-        //tutaj
+        this.#cells = [null, null, null, null, null, null, null, null, null];
         this.#gameData = {
             gameStarted: true,
-            cells: [null, null, null, null, null, null, null, null, null],
             crossTurn: true,
             event: null
         };
-        //tutaj
+        this.#lastTurn = this.#gameData.crossTurn;
     }
 
     Init() {
         const gameBox = document.createElement("div");
         gameBox.classList.add("game-box");
-        //tutaj
-        this.#gameData.cells.forEach((_, idx) => {
-            this.#gameData.cells[idx] = new TicTacToeCell(idx, this.#gameData);
-            gameBox.append(this.#gameData.cells[idx].Get());
+        this.#cells.forEach((_, idx) => {
+            this.#cells[idx] = new TicTacToeCell(gameBox, this.#gameData);
         });
-        //tutaj
         this.#mainDiv.append(gameBox);
     }
 
     StartGame(playerMode) {
-        if (playerMode) this.StartGamePlayer();
-        else this.StartGameComputer();
+        this.#playerMode = playerMode;
+        if (playerMode) this.#StartGamePlayer();
+        else this.#StartGameComputer();
     }
 
-    //tutaj
-    StartGamePlayer() {
+    #StartGamePlayer() {
+        const GameHandler = () => this.#MainGameHandler();
+        this.#gameData.event = GameHandler;
+    }
+
+    #StartGameComputer() {
         const GameHandler = () => {
-            if (this.CheckWin()) {
-                if (this.#gameData.cells[this.#gameWinningCombination[0]].Value()) this.#ticTacToe.TicTacToeScore.CrossWin();
-                else this.#ticTacToe.TicTacToeScore.CircleWin();
-                this.#gameData.gameStarted = false;
-                this.#ticTacToe.TicTacToeReset.ActivePlayAgain();
+            if (!this.#gameData.crossTurn) {
+                const possibleMoves = [];
+                this.#cells.forEach((e, idx) => {
+                    if (e.Value == null) possibleMoves.append(idx);
+                });
+                this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].Click();
             }
-            /*else if (this.CheckDraw()) {
-                this.#gameData.gameStarted = false;
-                this.#ticTacToe.TicTacToeReset.ActivePlayAgain();
-            }*/
+            this.#MainGameHandler();
         };
-        //GameHandler.bind(this);
         this.#gameData.event = GameHandler;
     }
-    //tutaj
 
-    //tutaj
-    StartGameComputer() {
-        //tutaj
-        const GameHandler = () => {
-
-        };
-        //tutaj
-        GameHandler.bind(this);
-        this.#gameData.event = GameHandler;
+    #MainGameHandler() {
+        if (this.#CheckWin()) {
+            if (this.#cells[this.#gameWinningCombination[0]].Value) this.#ticTacToe.TicTacToeScore.CrossWin();
+            else this.#ticTacToe.TicTacToeScore.CircleWin();
+            this.#StopGame();
+        }
+        else if (this.#CheckDraw()) this.#StopGame();
     }
-    //tutaj
 
-    CheckWin() {
+    #CheckWin() {
         for (const comb of this.#gameWinningCombinations) {
-            if (this.#gameData.cells[comb[0]].Value() == this.#gameData.cells[comb[1]].Value() &&
-                this.#gameData.cells[comb[1]].Value() == this.#gameData.cells[comb[2]].Value() &&
-                this.#gameData.cells[comb[0]].Value() != null
+            if (this.#cells[comb[0]].Value == this.#cells[comb[1]].Value &&
+                this.#cells[comb[1]].Value == this.#cells[comb[2]].Value &&
+                this.#cells[comb[0]].Value != null
             ) {
                 this.#gameWinningCombination = comb;
                 return true;
@@ -90,20 +87,29 @@ export class TicTacToeGame {
         return false;
     }
 
-    //tutaj
-    CheckDraw() {
-        this.#gameData.cells.forEach(e => {
-            if (e.Value() == null) return false;
-        });
+    #CheckDraw() {
+        for (let i = 0; i < this.#cells.length; i++) {
+            if (this.#cells[i].Value == null) {
+                return false;
+            }
+        }
         return true;
     }
 
-    Reset() {
-        this.#gameData.gameStarted = true;
-        this.#gameData.cells.forEach(e => {
-            e.Clear();
-        });
-        this.#gameData.crossTurn; //to
+    #StopGame() {
+        this.#gameData.gameStarted = false;
+        this.#ticTacToe.TicTacToeReset.ActivePlayAgain();
     }
-    //tutaj
+
+    ResetGame() {
+        this.#cells.forEach(cell => {
+            cell.Clear();
+        });
+        this.#gameData.gameStarted = true;
+        this.#gameData.crossTurn = this.#lastTurn = !this.#lastTurn;
+        this.#ticTacToe.TicTacToeReset.DisablePlayAgain();
+        if (!this.#playerMode && !this.#gameData.crossTurn) {
+            this.#cells[Math.floor(Math.random() * this.#cells.length)].Click();
+        }
+    }
 }

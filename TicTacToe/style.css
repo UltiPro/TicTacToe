@@ -11,6 +11,15 @@
     --shape-width: 1.75rem;
 }
 
+@media only screen and (max-width: 420px) {
+    :root {
+        --game-board: 300px;
+        --game-board-square: calc(var(--game-board) / 3);
+        --game-board-square-item: calc(var(--game-board-square) - 2rem);
+        --shape-width: 1.25rem;
+    }
+}
+
 *,
 *::before,
 *::after {

@@ -17,9 +17,7 @@ export class TicTacToeReset {
         `;
         this.#mainDiv.append(resetBox);
         this.#playAgainBtn = document.querySelector(".reset-box button:nth-child(1)");
-        document.querySelector(".reset-box button:nth-child(2)").addEventListener("click", () => {
-            location.reload();
-        });
+        document.querySelector(".reset-box button:nth-child(2)").addEventListener("click", () => location.reload());
     }
 
     #ClickPlayAgain = () => this.#ticTacToe.TicTacToeGame.ResetGame();

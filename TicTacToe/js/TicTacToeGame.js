@@ -51,17 +51,40 @@ export class TicTacToeGame {
         this.#gameData.event = GameHandler;
     }
 
-    //tutaj
     #StartGameComputer() {
+        //tutaj
+        const board = [null, null, null, null, null, null, null, null, null];
         const GameHandler = () => {
             this.#MainGameHandler();
+
+            // [x, x, x, y, y, y, , , ]
+
+            this.#cells.forEach((e, idx) => {
+                if (e.Value != null) board[idx] = e.Value;
+            });
+            if (board.includes(e => e == false)) {
+
+            }
+            else {
+
+            }
+
+            for (const comb in this.#gameWinningCombinations) {
+
+            }
+
             const possibleMoves = [];
             this.#cells.forEach((e, idx) => {
                 if (e.Value == null) possibleMoves.push(idx);
             });
             if (possibleMoves.length > 0) this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].ClickByComputer(this.#gameData);
+
+
+
+
             if (this.#gameData.gameStarted) this.#MainGameHandler();
         };
+        //tutaj
         this.#gameData.event = GameHandler;
     }
 
@@ -74,9 +97,11 @@ export class TicTacToeGame {
             this.#cells[this.#gameWinningCombination[2]].SetActive();
             this.#StopGame();
         }
-        else if (this.#CheckDraw()) this.#StopGame();
+        else if (this.#CheckDraw()) {
+            this.#cells.forEach(cell => cell.SetActive());
+            this.#StopGame();
+        }
     }
-    //tutaj
 
     #CheckWin() {
         for (const comb of this.#gameWinningCombinations) {
@@ -92,11 +117,8 @@ export class TicTacToeGame {
     }
 
     #CheckDraw() {
-        for (let i = 0; i < this.#cells.length; i++) {
-            if (this.#cells[i].Value == null) {
-                return false;
-            }
-        }
+        for (let i = 0; i < this.#cells.length; i++)
+            if (this.#cells[i].Value == null) return false;
         return true;
     }
 
@@ -106,9 +128,7 @@ export class TicTacToeGame {
     }
 
     ResetGame() {
-        this.#cells.forEach(cell => {
-            cell.Clear();
-        });
+        this.#cells.forEach(cell => cell.Clear());
         this.#gameData.gameStarted = true;
         this.#gameData.crossTurn = this.#lastTurn = !this.#lastTurn;
         this.#ticTacToe.TicTacToeReset.DisablePlayAgain();

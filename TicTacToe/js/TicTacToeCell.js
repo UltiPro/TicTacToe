@@ -1,40 +1,38 @@
 export class TicTacToeCell {
     #elementDiv;
-    #gameData;
+    #index;
     #value;
+    #gameData;
 
-    constructor(gameBox, gameData) {
+    constructor(index, gameData, gameBox) {
         this.#elementDiv = document.createElement("div");
         this.#elementDiv.classList.add("square");
-        this.#elementDiv.addEventListener("click", () => { this.#Click(); });
+        this.#elementDiv.addEventListener("click", () => this.#ClickByPlayer());
         this.#elementDiv.appendChild(document.createElement("div"));
-        gameBox.append(this.#elementDiv);
-        this.#gameData = gameData;
+        this.#index = index;
         this.#value = null;
+        this.#gameData = gameData;
+        gameBox.append(this.#elementDiv);
     }
+
+    get Index() { return this.#index; }
 
     get Value() { return this.#value; }
 
-    #Click() {
-        if (this.#value === true || this.#value === false || !this.#gameData.gameStarted) return;
+    Click() {
+        if (this.#value !== null || !this.#gameData.gameStarted) return;
         if (this.#gameData.crossTurn) this.#elementDiv.children[0].classList.add("cross");
         else this.#elementDiv.children[0].classList.add("circle");
         this.#value = this.#gameData.crossTurn;
         this.#gameData.crossTurn = !this.#gameData.crossTurn;
+    }
+
+    #ClickByPlayer() {
+        this.Click();
         this.#gameData.event();
     }
 
-    ClickByComputer() {
-        if (!this.#gameData.gameStarted) return;
-        if (this.#gameData.crossTurn) this.#elementDiv.children[0].classList.add("cross");
-        else this.#elementDiv.children[0].classList.add("circle");
-        this.#value = this.#gameData.crossTurn;
-        this.#gameData.crossTurn = !this.#gameData.crossTurn;
-    }
-
-    SetActive() {
-        this.#elementDiv.classList.add("square-active");
-    }
+    SetActive() { this.#elementDiv.classList.add("square-active"); }
 
     Clear() {
         this.#elementDiv.classList.remove("square-active");

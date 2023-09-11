@@ -35,7 +35,7 @@ export class TicTacToeGame {
         const gameBox = document.createElement("div");
         gameBox.classList.add("game-box");
         this.#cells.forEach((_, idx) => {
-            this.#cells[idx] = new TicTacToeCell(gameBox, this.#gameData);
+            this.#cells[idx] = new TicTacToeCell(idx, this.#gameData, gameBox);
         });
         this.#mainDiv.append(gameBox);
     }
@@ -52,39 +52,73 @@ export class TicTacToeGame {
     }
 
     #StartGameComputer() {
-        //tutaj
-        const board = [null, null, null, null, null, null, null, null, null];
-        const GameHandler = () => {
-            this.#MainGameHandler();
-
-            // [x, x, x, y, y, y, , , ]
-
-            this.#cells.forEach((e, idx) => {
-                if (e.Value != null) board[idx] = e.Value;
-            });
-            if (board.includes(e => e == false)) {
-
-            }
-            else {
-
-            }
-
-            for (const comb in this.#gameWinningCombinations) {
-
-            }
-
+        let chosenCombination;
+        const RandomClick = () => {
             const possibleMoves = [];
             this.#cells.forEach((e, idx) => {
                 if (e.Value == null) possibleMoves.push(idx);
             });
-            if (possibleMoves.length > 0) this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].ClickByComputer(this.#gameData);
-
-
-
-
-            if (this.#gameData.gameStarted) this.#MainGameHandler();
+            this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].Click();
+        };
+        const StopPlayerWin = () => {
+            let returnStatus = false;
+            const playerCells = this.#cells.filter(cell => cell.Value === true).map(cell => cell.Index);
+            this.#gameWinningCombinations.every(comb => {
+                if (returnStatus) return false;
+                let matches = 0;
+                for (let i = 0; i < playerCells.length; i++) {
+                    if (comb.includes(playerCells[i])) matches++;
+                }
+                if (matches == 2) {
+                    this.#cells[comb.filter(index => this.#cells[index].Value === null)[0]].Click();
+                    returnStatus = true;
+                }
+                return true;
+            });
+            return returnStatus;
         };
         //tutaj
+        const CanClick = (combination) => {
+            if (this.#cells[combination[0]].Value != true &&
+                this.#cells[combination[1]].Value != true &&
+                this.#cells[combination[2]].Value != true
+            ) return true;
+            return false;
+        }
+        //tutaj
+        const GameHandler = () => {
+            this.#MainGameHandler();
+            if (this.#gameData.gameStarted) {
+                const circles = this.#cells.filter(cell => cell.Value === false);
+                switch (circles.length) {
+                    case 0:
+                        RandomClick();
+                        break;
+                    case 1:
+                        if (!StopPlayerWin()) {
+                            const possibleCombinations = [];
+                            this.#gameWinningCombinations.forEach(comb => {
+                                if (comb.includes(circles[0].Index) && CanClick(comb)) possibleCombinations.push(comb);
+                            });
+                            //tutaj
+                            if (possibleCombinations.length > 0) {
+                                chosenCombination = possibleCombinations[Math.floor(Math.random() * 2)]
+                                console.log(chosenCombination)
+                            }
+                            else {
+                                if (this.#cells[4].Value === null) this.#cells[4].Click();
+                                else RandomClick();
+                            }
+                        }
+                        break;
+                    default:
+                        // tu odwrotnie zagrożenie wygrania uzytkonwnika najpierw my wygrywamy?
+                        //tutaj
+                        break;
+                }
+                this.#MainGameHandler();
+            }
+        };
         this.#gameData.event = GameHandler;
     }
 
@@ -104,7 +138,7 @@ export class TicTacToeGame {
     }
 
     #CheckWin() {
-        for (const comb of this.#gameWinningCombinations) {
+        for (const comb of this.#gameWinningCombinations)
             if (this.#cells[comb[0]].Value == this.#cells[comb[1]].Value &&
                 this.#cells[comb[1]].Value == this.#cells[comb[2]].Value &&
                 this.#cells[comb[0]].Value != null
@@ -112,7 +146,6 @@ export class TicTacToeGame {
                 this.#gameWinningCombination = comb;
                 return true;
             }
-        }
         return false;
     }
 
@@ -132,8 +165,7 @@ export class TicTacToeGame {
         this.#gameData.gameStarted = true;
         this.#gameData.crossTurn = this.#lastTurn = !this.#lastTurn;
         this.#ticTacToe.TicTacToeReset.DisablePlayAgain();
-        if (!this.#playerMode && !this.#gameData.crossTurn) {
-            this.#cells[Math.floor(Math.random() * this.#cells.length)].ClickByComputer();
-        }
+        if (!this.#playerMode && !this.#gameData.crossTurn)
+            this.#cells[Math.floor(Math.random() * this.#cells.length)].Click();
     }
 }

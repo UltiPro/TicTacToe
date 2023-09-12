@@ -52,7 +52,7 @@ export class TicTacToeGame {
     }
 
     #StartGameComputer() {
-        let chosenCombination;
+        let chosenCombination = null;
         const RandomClick = () => {
             const possibleMoves = [];
             this.#cells.forEach((e, idx) => {
@@ -66,10 +66,10 @@ export class TicTacToeGame {
             this.#gameWinningCombinations.every(comb => {
                 if (returnStatus) return false;
                 let matches = 0;
-                for (let i = 0; i < playerCells.length; i++) {
+                for (let i = 0; i < playerCells.length; i++)
                     if (comb.includes(playerCells[i])) matches++;
-                }
-                if (matches == 2) {
+                if (matches == 2 && !(this.#cells[comb[0]].Value === false ||
+                    this.#cells[comb[1]].Value === false || this.#cells[comb[2]].Value === false)) {
                     this.#cells[comb.filter(index => this.#cells[index].Value === null)[0]].Click();
                     returnStatus = true;
                 }
@@ -77,7 +77,6 @@ export class TicTacToeGame {
             });
             return returnStatus;
         };
-        //tutaj
         const CanClick = (combination) => {
             if (this.#cells[combination[0]].Value != true &&
                 this.#cells[combination[1]].Value != true &&
@@ -85,7 +84,28 @@ export class TicTacToeGame {
             ) return true;
             return false;
         }
-        //tutaj
+        const ChoseCombination = (circles) => {
+            let possibleCombinations = new Set();
+            this.#gameWinningCombinations.forEach(comb => {
+                circles.forEach(circle => {
+                    if (comb.includes(circle.Index) && CanClick(comb)) possibleCombinations.add(comb);
+                });
+            });
+            possibleCombinations = Array.from(possibleCombinations);
+            if (possibleCombinations.length > 0) {
+                chosenCombination = possibleCombinations[Math.floor(Math.random() * possibleCombinations.length)];
+                let chosenPosition = chosenCombination[Math.floor(Math.random() * chosenCombination.length)];
+                while (this.#cells[chosenPosition].Value !== null)
+                    chosenPosition = chosenCombination[Math.floor(Math.random() * chosenCombination.length)];
+                this.#cells[chosenPosition].Click();
+                return true;
+            }
+            else {
+                if (this.#cells[4].Value === null) this.#cells[4].Click();
+                else RandomClick();
+                return false;
+            }
+        }
         const GameHandler = () => {
             this.#MainGameHandler();
             if (this.#gameData.gameStarted) {
@@ -95,25 +115,20 @@ export class TicTacToeGame {
                         RandomClick();
                         break;
                     case 1:
-                        if (!StopPlayerWin()) {
-                            const possibleCombinations = [];
-                            this.#gameWinningCombinations.forEach(comb => {
-                                if (comb.includes(circles[0].Index) && CanClick(comb)) possibleCombinations.push(comb);
-                            });
-                            //tutaj
-                            if (possibleCombinations.length > 0) {
-                                chosenCombination = possibleCombinations[Math.floor(Math.random() * 2)]
-                                console.log(chosenCombination)
-                            }
-                            else {
-                                if (this.#cells[4].Value === null) this.#cells[4].Click();
-                                else RandomClick();
-                            }
-                        }
+                        if (!StopPlayerWin()) ChoseCombination(circles);
                         break;
                     default:
-                        // tu odwrotnie zagrożenie wygrania uzytkonwnika najpierw my wygrywamy?
-                        //tutaj
+                        if (chosenCombination === null) ChoseCombination(circles);
+                        else {
+                            if (CanClick(chosenCombination)) {
+                                this.#cells[chosenCombination[0]].Click();
+                                this.#cells[chosenCombination[1]].Click();
+                                this.#cells[chosenCombination[2]].Click();
+                            }
+                            else if (!StopPlayerWin()) {
+                                if (!ChoseCombination(circles)) RandomClick();
+                            }
+                        }
                         break;
                 }
                 this.#MainGameHandler();

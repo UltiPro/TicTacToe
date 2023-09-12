@@ -108,7 +108,7 @@ export class TicTacToeGame {
         }
         const GameHandler = () => {
             this.#MainGameHandler();
-            if (this.#gameData.gameStarted) {
+            if (this.#gameData.gameStarted && !this.#gameData.crossTurn) {
                 const circles = this.#cells.filter(cell => cell.Value === false);
                 switch (circles.length) {
                     case 0:

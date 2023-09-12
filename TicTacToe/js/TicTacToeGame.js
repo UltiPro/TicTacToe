@@ -58,7 +58,7 @@ export class TicTacToeGame {
             this.#cells.forEach((e, idx) => {
                 if (e.Value == null) possibleMoves.push(idx);
             });
-            this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].Click();
+            this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].ClickByComputer();
         };
         const StopPlayerWin = () => {
             let returnStatus = false;
@@ -70,7 +70,7 @@ export class TicTacToeGame {
                     if (comb.includes(playerCells[i])) matches++;
                 if (matches == 2 && !(this.#cells[comb[0]].Value === false ||
                     this.#cells[comb[1]].Value === false || this.#cells[comb[2]].Value === false)) {
-                    this.#cells[comb.filter(index => this.#cells[index].Value === null)[0]].Click();
+                    this.#cells[comb.filter(index => this.#cells[index].Value === null)[0]].ClickByComputer();
                     returnStatus = true;
                 }
                 return true;
@@ -97,11 +97,11 @@ export class TicTacToeGame {
                 let chosenPosition = chosenCombination[Math.floor(Math.random() * chosenCombination.length)];
                 while (this.#cells[chosenPosition].Value !== null)
                     chosenPosition = chosenCombination[Math.floor(Math.random() * chosenCombination.length)];
-                this.#cells[chosenPosition].Click();
+                this.#cells[chosenPosition].ClickByComputer();
                 return true;
             }
             else {
-                if (this.#cells[4].Value === null) this.#cells[4].Click();
+                if (this.#cells[4].Value === null) this.#cells[4].ClickByComputer();
                 else RandomClick();
                 return false;
             }
@@ -121,9 +121,9 @@ export class TicTacToeGame {
                         if (chosenCombination === null) ChoseCombination(circles);
                         else {
                             if (CanClick(chosenCombination)) {
-                                this.#cells[chosenCombination[0]].Click();
-                                this.#cells[chosenCombination[1]].Click();
-                                this.#cells[chosenCombination[2]].Click();
+                                this.#cells[chosenCombination[0]].ClickByComputer();
+                                this.#cells[chosenCombination[1]].ClickByComputer();
+                                this.#cells[chosenCombination[2]].ClickByComputer();
                             }
                             else if (!StopPlayerWin()) {
                                 if (!ChoseCombination(circles)) RandomClick();
@@ -181,6 +181,6 @@ export class TicTacToeGame {
         this.#gameData.crossTurn = this.#lastTurn = !this.#lastTurn;
         this.#ticTacToe.TicTacToeReset.DisablePlayAgain();
         if (!this.#playerMode && !this.#gameData.crossTurn)
-            this.#cells[Math.floor(Math.random() * this.#cells.length)].Click();
+            this.#cells[Math.floor(Math.random() * this.#cells.length)].ClickByComputer();
     }
 }

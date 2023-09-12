@@ -1,18 +1,18 @@
 export class TicTacToeCell {
-    #elementDiv;
+    #cellDiv;
     #index;
     #value;
     #gameData;
 
     constructor(index, gameData, gameBox) {
-        this.#elementDiv = document.createElement("div");
-        this.#elementDiv.classList.add("square");
-        this.#elementDiv.addEventListener("click", () => this.#ClickByPlayer());
-        this.#elementDiv.appendChild(document.createElement("div"));
+        this.#cellDiv = document.createElement("div");
+        this.#cellDiv.classList.add("square");
+        this.#cellDiv.addEventListener("click", () => this.#ClickByPlayer());
+        this.#cellDiv.appendChild(document.createElement("div"));
         this.#index = index;
         this.#value = null;
         this.#gameData = gameData;
-        gameBox.append(this.#elementDiv);
+        gameBox.append(this.#cellDiv);
     }
 
     get Index() { return this.#index; }
@@ -21,8 +21,8 @@ export class TicTacToeCell {
 
     Click() {
         if (this.#value !== null || !this.#gameData.gameStarted) return;
-        if (this.#gameData.crossTurn) this.#elementDiv.children[0].classList.add("cross");
-        else this.#elementDiv.children[0].classList.add("circle");
+        if (this.#gameData.crossTurn) this.#cellDiv.children[0].classList.add("cross");
+        else this.#cellDiv.children[0].classList.add("circle");
         this.#value = this.#gameData.crossTurn;
         this.#gameData.crossTurn = !this.#gameData.crossTurn;
     }
@@ -32,12 +32,12 @@ export class TicTacToeCell {
         this.#gameData.event();
     }
 
-    SetActive() { this.#elementDiv.classList.add("square-active"); }
+    SetActive() { this.#cellDiv.classList.add("square-active"); }
 
     Clear() {
-        this.#elementDiv.classList.remove("square-active");
-        this.#elementDiv.children[0].classList.remove("cross");
-        this.#elementDiv.children[0].classList.remove("circle");
+        this.#cellDiv.classList.remove("square-active");
+        this.#cellDiv.children[0].classList.remove("cross");
+        this.#cellDiv.children[0].classList.remove("circle");
         this.#value = null;
     }
 }

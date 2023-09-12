@@ -20,7 +20,6 @@ export class TicTacToeCell {
     get Value() { return this.#value; }
 
     Click() {
-        if (this.#value !== null || !this.#gameData.gameStarted) return;
         if (this.#gameData.crossTurn) this.#cellDiv.children[0].classList.add("cross");
         else this.#cellDiv.children[0].classList.add("circle");
         this.#value = this.#gameData.crossTurn;
@@ -28,8 +27,14 @@ export class TicTacToeCell {
     }
 
     #ClickByPlayer() {
+        if (this.#value !== null || !this.#gameData.gameStarted) return;
         this.Click();
         this.#gameData.event();
+    }
+
+    ClickByComputer() {
+        if (this.#value !== null || !this.#gameData.gameStarted) return;
+        this.Click();
     }
 
     SetActive() { this.#cellDiv.classList.add("square-active"); }

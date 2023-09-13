@@ -24,7 +24,7 @@ export class TicTacToeScore extends TicTacToeBase {
         this.#mainDiv.append(scoreBox);
         this.#scoreCross = document.getElementById("score-cross");
         this.#scoreCircle = document.getElementById("score-circle");
-        this._inited = true;
+        this._SetInited();
     }
 
     CrossWin = () => this.#scoreCross.innerText = +this.#scoreCross.textContent + 1;

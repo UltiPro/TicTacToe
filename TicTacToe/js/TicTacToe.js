@@ -1,14 +1,16 @@
+import { TicTacToeBase } from './TicTacToeBase.js';
 import { TicTacToeScore } from './TicTacToeScore.js';
 import { TicTacToeGame } from './TicTacToeGame.js';
 import { TicTacToeReset } from './TicTacToeReset.js';
 
-export class TicTacToe {
+export class TicTacToe extends TicTacToeBase {
     #mainDiv;
     #ticTacToeScore;
     #ticTacToeGame;
     #ticTacToeReset;
 
     constructor() {
+        super();
         this.#mainDiv = document.getElementById("tic-tac-toe");
         this.#ticTacToeScore = new TicTacToeScore(this.#mainDiv);
         this.#ticTacToeGame = new TicTacToeGame(this, this.#mainDiv);
@@ -22,6 +24,7 @@ export class TicTacToe {
     get TicTacToeReset() { return this.#ticTacToeReset; }
 
     Init() {
+        if (this._inited) return;
         const playerModeBtn = document.createElement("button");
         playerModeBtn.classList.add("button-big");
         playerModeBtn.innerHTML = "Player Mode";
@@ -32,6 +35,7 @@ export class TicTacToe {
         computerModeBtn.addEventListener("click", () => this.#InitGame(false));
         this.#mainDiv.append(playerModeBtn);
         this.#mainDiv.append(computerModeBtn);
+        this._inited = true;
     }
 
     #InitGame(playerMode) {

@@ -1,13 +1,17 @@
-export class TicTacToeScore {
+import { TicTacToeBase } from './TicTacToeBase.js';
+
+export class TicTacToeScore extends TicTacToeBase {
     #mainDiv;
     #scoreCross;
     #scoreCircle;
 
     constructor(mainDiv) {
+        super();
         this.#mainDiv = mainDiv;
     }
 
     Init() {
+        if (this._inited) return;
         const scoreBox = document.createElement("div");
         scoreBox.classList.add("score-box");
         scoreBox.innerHTML = `
@@ -20,6 +24,7 @@ export class TicTacToeScore {
         this.#mainDiv.append(scoreBox);
         this.#scoreCross = document.getElementById("score-cross");
         this.#scoreCircle = document.getElementById("score-circle");
+        this._inited = true;
     }
 
     CrossWin = () => this.#scoreCross.innerText = +this.#scoreCross.textContent + 1;

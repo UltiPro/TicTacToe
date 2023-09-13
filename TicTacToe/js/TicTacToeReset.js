@@ -1,14 +1,18 @@
-export class TicTacToeReset {
+import { TicTacToeBase } from './TicTacToeBase.js';
+
+export class TicTacToeReset extends TicTacToeBase {
     #ticTacToe;
     #mainDiv;
     #playAgainBtn;
 
     constructor(ticTacToe, mainDiv) {
+        super();
         this.#ticTacToe = ticTacToe;
         this.#mainDiv = mainDiv;
     }
 
     Init() {
+        if (this._inited) return;
         const resetBox = document.createElement("div");
         resetBox.classList.add("reset-box");
         resetBox.innerHTML = `
@@ -18,6 +22,7 @@ export class TicTacToeReset {
         this.#mainDiv.append(resetBox);
         this.#playAgainBtn = document.querySelector(".reset-box button:nth-child(1)");
         document.querySelector(".reset-box button:nth-child(2)").addEventListener("click", () => location.reload());
+        this._inited = true;
     }
 
     #ClickPlayAgain = () => this.#ticTacToe.TicTacToeGame.ResetGame();

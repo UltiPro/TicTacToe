@@ -11,7 +11,7 @@ export class TicTacToeScore extends TicTacToeBase {
     }
 
     Init() {
-        if (this._inited) return;
+        if (this._inited) throw new Error("Method 'Init()' can be initialized once.");
         const scoreBox = document.createElement("div");
         scoreBox.classList.add("score-box");
         scoreBox.innerHTML = `

@@ -35,7 +35,7 @@ export class TicTacToe extends TicTacToeBase {
         computerModeBtn.addEventListener("click", () => this.#InitGame(false));
         this.#mainDiv.append(playerModeBtn);
         this.#mainDiv.append(computerModeBtn);
-        this._inited = true;
+        this._SetInited();
     }
 
     #InitGame(playerMode) {

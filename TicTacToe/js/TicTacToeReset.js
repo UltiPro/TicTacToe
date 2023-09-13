@@ -12,7 +12,7 @@ export class TicTacToeReset extends TicTacToeBase {
     }
 
     Init() {
-        if (this._inited) return;
+        if (this._inited) throw new Error("Method 'Init()' can be initialized once.");
         const resetBox = document.createElement("div");
         resetBox.classList.add("reset-box");
         resetBox.innerHTML = `

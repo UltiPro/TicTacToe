@@ -24,7 +24,7 @@ export class TicTacToe extends TicTacToeBase {
     get TicTacToeReset() { return this.#ticTacToeReset; }
 
     Init() {
-        if (this._inited) return;
+        if (this._inited) throw new Error("Method 'Init()' can be initialized once.");
         const playerModeBtn = document.createElement("button");
         playerModeBtn.classList.add("button-big");
         playerModeBtn.innerHTML = "Player Mode";

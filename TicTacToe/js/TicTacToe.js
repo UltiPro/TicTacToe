@@ -38,8 +38,7 @@ export class TicTacToe {
         this.#mainDiv.removeChild(this.#mainDiv.childNodes[0]);
         this.#mainDiv.removeChild(this.#mainDiv.childNodes[0]);
         this.#ticTacToeScore.Init();
-        this.#ticTacToeGame.Init();
+        this.#ticTacToeGame.Init(playerMode);
         this.#ticTacToeReset.Init();
-        this.#ticTacToeGame.StartGame(playerMode);
     }
 }

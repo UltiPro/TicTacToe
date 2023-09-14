@@ -17,13 +17,13 @@ export class TicTacToeCell extends TicTacToeBase {
 
     get Value() { return this.#value; }
 
-    Init(gameBox) {
+    Init(appendTo) {
         if (this._inited) throw new Error("Method 'Init()' can be initialized once.");
         this.#cellDiv = document.createElement("div");
         this.#cellDiv.classList.add("square");
         this.#cellDiv.addEventListener("click", () => this.#ClickByPlayer());
         this.#cellDiv.appendChild(document.createElement("div"));
-        gameBox.append(this.#cellDiv);
+        appendTo.append(this.#cellDiv);
         this._SetInited();
         return this;
     }

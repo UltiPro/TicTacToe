@@ -21,6 +21,7 @@ export class TicTacToeCell extends TicTacToeBase {
         if (this._inited) throw new Error("Method 'Init()' can be initialized once.");
         this.#cellDiv = document.createElement("div");
         this.#cellDiv.classList.add("square");
+        this.#cellDiv.classList.add("square-hover");
         this.#cellDiv.addEventListener("click", () => this.#ClickByPlayer());
         this.#cellDiv.appendChild(document.createElement("div"));
         appendTo.append(this.#cellDiv);
@@ -46,10 +47,13 @@ export class TicTacToeCell extends TicTacToeBase {
         this.#Click();
     }
 
-    SetActive() { this.#cellDiv.classList.add("square-active"); }
+    SetActive = () => this.#cellDiv.classList.add("square-active");
+
+    RemoveHover = () => this.#cellDiv.classList.remove("square-hover");
 
     Clear() {
         this.#cellDiv.classList.remove("square-active");
+        this.#cellDiv.classList.add("square-hover");
         this.#cellDiv.children[0].classList.remove("cross");
         this.#cellDiv.children[0].classList.remove("circle");
         this.#value = null;

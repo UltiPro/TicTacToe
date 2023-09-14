@@ -1,6 +1,7 @@
+import { TicTacToeBase } from './TicTacToeBase.js';
 import { TicTacToeCell } from './TicTacToeCell.js';
 
-export class TicTacToeGame {
+export class TicTacToeGame extends TicTacToeBase {
     #ticTacToe;
     #mainDiv;
     #cells;
@@ -20,6 +21,7 @@ export class TicTacToeGame {
     #lastTurn;
 
     constructor(ticTacToe, mainDiv) {
+        super();
         this.#ticTacToe = ticTacToe;
         this.#mainDiv = mainDiv;
         this.#cells = [null, null, null, null, null, null, null, null, null];
@@ -31,19 +33,18 @@ export class TicTacToeGame {
         this.#lastTurn = this.#gameData.crossTurn;
     }
 
-    Init() {
+    Init(playerMode) {
+        if (this._inited) throw new Error("Method 'Init()' can be initialized once.");
+        this.#playerMode = playerMode;
         const gameBox = document.createElement("div");
         gameBox.classList.add("game-box");
         this.#cells.forEach((_, idx) => {
-            this.#cells[idx] = new TicTacToeCell(idx, this.#gameData, gameBox);
+            this.#cells[idx] = new TicTacToeCell(idx, this.#gameData).Init(gameBox);
         });
         this.#mainDiv.append(gameBox);
-    }
-
-    StartGame(playerMode) {
-        this.#playerMode = playerMode;
         if (this.#playerMode) this.#StartGamePlayer();
         else this.#StartGameComputer();
+        this._SetInited();
     }
 
     #StartGamePlayer() {
@@ -51,6 +52,7 @@ export class TicTacToeGame {
         this.#gameData.event = GameHandler;
     }
 
+    //tutaj
     #StartGameComputer() {
         let chosenCombination = null;
         const RandomClick = () => {
@@ -136,18 +138,23 @@ export class TicTacToeGame {
         };
         this.#gameData.event = GameHandler;
     }
+    //tutaj
 
     #MainGameHandler() {
         if (this.#CheckWin()) {
             if (this.#cells[this.#gameWinningCombination[0]].Value) this.#ticTacToe.TicTacToeScore.CrossWin();
             else this.#ticTacToe.TicTacToeScore.CircleWin();
+            this.#cells.forEach(cell => cell.RemoveHover());
             this.#cells[this.#gameWinningCombination[0]].SetActive();
             this.#cells[this.#gameWinningCombination[1]].SetActive();
             this.#cells[this.#gameWinningCombination[2]].SetActive();
             this.#StopGame();
         }
         else if (this.#CheckDraw()) {
-            this.#cells.forEach(cell => cell.SetActive());
+            this.#cells.forEach(cell => {
+                cell.RemoveHover()
+                cell.SetActive()
+            });
             this.#StopGame();
         }
     }

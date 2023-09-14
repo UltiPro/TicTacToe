@@ -47,13 +47,13 @@ export class TicTacToeCell extends TicTacToeBase {
         this.#Click();
     }
 
-    SetActive = () => this.#cellDiv.classList.add("square-active");
-
     RemoveHover = () => this.#cellDiv.classList.remove("square-hover");
 
+    SetActive = () => this.#cellDiv.classList.add("square-active");
+
     Clear() {
-        this.#cellDiv.classList.remove("square-active");
         this.#cellDiv.classList.add("square-hover");
+        this.#cellDiv.classList.remove("square-active");
         this.#cellDiv.children[0].classList.remove("cross");
         this.#cellDiv.children[0].classList.remove("circle");
         this.#value = null;

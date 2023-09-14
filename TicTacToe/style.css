@@ -121,7 +121,7 @@ button:disabled {
     transition: all .4s;
 }
 
-.square:hover {
+.square-hover:hover {
     background-color: var(--darkSquare);
     border: 0.15rem solid whitesmoke;
     cursor: pointer;

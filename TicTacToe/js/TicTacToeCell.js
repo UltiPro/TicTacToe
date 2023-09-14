@@ -1,23 +1,32 @@
-export class TicTacToeCell {
+import { TicTacToeBase } from './TicTacToeBase.js';
+
+export class TicTacToeCell extends TicTacToeBase {
     #cellDiv;
     #index;
     #value;
     #gameData;
 
-    constructor(index, gameData, gameBox) {
-        this.#cellDiv = document.createElement("div");
-        this.#cellDiv.classList.add("square");
-        this.#cellDiv.addEventListener("click", () => this.#ClickByPlayer());
-        this.#cellDiv.appendChild(document.createElement("div"));
+    constructor(index, gameData) {
+        super();
         this.#index = index;
         this.#value = null;
         this.#gameData = gameData;
-        gameBox.append(this.#cellDiv);
     }
 
     get Index() { return this.#index; }
 
     get Value() { return this.#value; }
+
+    Init(gameBox) {
+        if (this._inited) throw new Error("Method 'Init()' can be initialized once.");
+        this.#cellDiv = document.createElement("div");
+        this.#cellDiv.classList.add("square");
+        this.#cellDiv.addEventListener("click", () => this.#ClickByPlayer());
+        this.#cellDiv.appendChild(document.createElement("div"));
+        gameBox.append(this.#cellDiv);
+        this._SetInited();
+        return this;
+    }
 
     #Click() {
         if (this.#gameData.crossTurn) this.#cellDiv.children[0].classList.add("cross");

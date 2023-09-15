@@ -5,15 +5,14 @@ Tic tac toe game written in JavaScript. Game offers two modes. Player mode which
 
 # Preview
 
-![](/screenshots/Game1.jpg | width=33)
 <img src="./screenshots/Game1.jpg" alt="Game preview 1" width="200">
 
-![Game preview 2](/screenshots/Game2.jpg | width=33)
+<img src="./screenshots/Game2.jpg" alt="Game preview 2" width="200">
 
-![Game preview 3](/screenshots/Game3.jpg | width=33)
+<img src="./screenshots/Game3.jpg" alt="Game preview 3" width="200">
 
-![Game preview 4](/screenshots/Game4.jpg | width=33)
+<img src="./screenshots/Game4.jpg" alt="Game preview 4" width="200">
 
-![Game preview 5](/screenshots/Game5.jpg | width=33)
+<img src="./screenshots/Game5.jpg" alt="Game preview 5" width="200">
 
-![Game preview 6](/screenshots/Game6.jpg | width=33)
+<img src="./screenshots/Game6.jpg" alt="Game preview 6" width="200">

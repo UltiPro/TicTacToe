@@ -100,21 +100,20 @@ export class TicTacToeGame extends TicTacToeBase {
         };
         const StopPlayerWin = () => {
             let returnStatus = false;
-            //tutaj
-            const playerCells = this.#cells.filter(cell => cell.Value === true).map(cell => cell.Index);
-            this.#gameWinningCombinations.every(comb => {
+            const crossesIndexes = this.#cells.filter(cell => cell.Value === true).map(cell => cell.Index);
+            let matching = 0;
+            this.#gameWinningCombinations.every(combination => {
                 if (returnStatus) return false;
-                let matches = 0;
-                for (let i = 0; i < playerCells.length; i++)
-                    if (comb.includes(playerCells[i])) matches++;
-                if (matches == 2 && !(this.#cells[comb[0]].Value === false ||
-                    this.#cells[comb[1]].Value === false || this.#cells[comb[2]].Value === false)) {
-                    this.#cells[comb.filter(index => this.#cells[index].Value === null)[0]].ClickByComputer();
+                for (let i = 0; i < crossesIndexes.length; i++)
+                    if (combination.includes(crossesIndexes[i])) matching++;
+                if (matching == 2 && !(this.#cells[combination[0]].Value === false ||
+                    this.#cells[combination[1]].Value === false || this.#cells[combination[2]].Value === false)) {
+                    this.#cells[combination.filter(index => this.#cells[index].Value === null)[0]].ClickByComputer();
                     returnStatus = true;
                 }
+                matching = 0;
                 return true;
             });
-            //tutaj
             return returnStatus;
         };
         const GameHandler = () => {

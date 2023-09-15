@@ -52,16 +52,60 @@ export class TicTacToeGame extends TicTacToeBase {
         this.#gameData.event = GameHandler;
     }
 
-    //tutaj
     #StartGameComputer() {
+        let computerCombinations = [];
         let chosenCombination = null;
-        const RandomClick = () => {
-            const possibleMoves = [];
-            this.#cells.forEach((e, idx) => {
-                if (e.Value == null) possibleMoves.push(idx);
+        const ComputerCombinations = () => {
+            const crosses = this.#cells.filter(cell => cell.Value === true);
+            computerCombinations = computerCombinations.filter(combination => {
+                for (let i = 0; i < crosses.length; i++)
+                    if (combination.includes(crosses[i].Index)) return false;
+                return true;
             });
-            this.#cells[possibleMoves[Math.floor(Math.random() * possibleMoves.length)]].ClickByComputer();
         };
+        const ChooseBestCombination = (circles, countOfMatching) => {
+            if (countOfMatching == 0) return null;
+            let possibleCombinations = [];
+            let matching = 0;
+            computerCombinations.forEach(combination => {
+                for (let i = 0; i < circles.length; i++)
+                    if (combination.includes(circles[i].Index)) matching++;
+                if (matching == countOfMatching) possibleCombinations.push(combination);
+                matching = 0;
+            });
+            if (possibleCombinations.length == 0) return ChooseBestCombination(circles, countOfMatching - 1);
+            return possibleCombinations[Math.floor(Math.random() * possibleCombinations.length)];
+        };
+        const ChooseCombination = (circles) => {
+            ComputerCombinations();
+            if (computerCombinations.length > 0) {
+                chosenCombination = ChooseBestCombination(circles, 2);
+                if (chosenCombination == null) chosenCombination = computerCombinations[Math.floor(Math.random() * computerCombinations.length)];
+            }
+            else chosenCombination = null;
+        };
+        //tutaj
+        const Click = () => {
+            //tutaj
+            if (chosenCombination === null) throw Error("eee kurwa puste joł")
+            //tutaj
+            let position = Math.floor(Math.random() * chosenCombination.length);
+            while (this.#cells[chosenCombination[position]].Value !== null)
+                position = Math.floor(Math.random() * chosenCombination.length);
+            this.#cells[chosenCombination[position]].ClickByComputer();
+        };
+        //tutaj
+        //tutaj
+        const LastOfCombination = () => {
+            if (chosenCombination === null) return false;
+            let count = 0;
+            if (this.#cells[chosenCombination[0]].Value === null) count++;
+            if (this.#cells[chosenCombination[1]].Value === null) count++;
+            if (this.#cells[chosenCombination[2]].Value === null) count++;
+            return count > 1 ? false : true;
+        }
+        //tutaj
+        //tutaj
         const StopPlayerWin = () => {
             let returnStatus = false;
             const playerCells = this.#cells.filter(cell => cell.Value === true).map(cell => cell.Index);
@@ -79,56 +123,32 @@ export class TicTacToeGame extends TicTacToeBase {
             });
             return returnStatus;
         };
-        const CanClick = (combination) => {
-            if (this.#cells[combination[0]].Value != true &&
-                this.#cells[combination[1]].Value != true &&
-                this.#cells[combination[2]].Value != true
-            ) return true;
-            return false;
-        }
-        const ChoseCombination = (circles) => {
-            let possibleCombinations = new Set();
-            this.#gameWinningCombinations.forEach(comb => {
-                circles.forEach(circle => {
-                    if (comb.includes(circle.Index) && CanClick(comb)) possibleCombinations.add(comb);
-                });
-            });
-            possibleCombinations = Array.from(possibleCombinations);
-            if (possibleCombinations.length > 0) {
-                chosenCombination = possibleCombinations[Math.floor(Math.random() * possibleCombinations.length)];
-                let chosenPosition = chosenCombination[Math.floor(Math.random() * chosenCombination.length)];
-                while (this.#cells[chosenPosition].Value !== null)
-                    chosenPosition = chosenCombination[Math.floor(Math.random() * chosenCombination.length)];
-                this.#cells[chosenPosition].ClickByComputer();
-                return true;
-            }
-            else {
-                if (this.#cells[4].Value === null) this.#cells[4].ClickByComputer();
-                else RandomClick();
-                return false;
-            }
-        }
+        //tutaj
         const GameHandler = () => {
             this.#MainGameHandler();
             if (this.#gameData.gameStarted && !this.#gameData.crossTurn) {
                 const circles = this.#cells.filter(cell => cell.Value === false);
+                if (circles.length == 0) computerCombinations = Array.from(this.#gameWinningCombinations);
+                ChooseCombination(circles);
                 switch (circles.length) {
                     case 0:
-                        RandomClick();
+                        Click();
                         break;
                     case 1:
-                        if (!StopPlayerWin()) ChoseCombination(circles);
+                        if (!StopPlayerWin()) Click();
                         break;
                     default:
-                        if (chosenCombination === null) ChoseCombination(circles);
-                        else {
-                            if (CanClick(chosenCombination)) {
-                                this.#cells[chosenCombination[0]].ClickByComputer();
-                                this.#cells[chosenCombination[1]].ClickByComputer();
-                                this.#cells[chosenCombination[2]].ClickByComputer();
-                            }
-                            else if (!StopPlayerWin()) {
-                                if (!ChoseCombination(circles)) RandomClick();
+                        if (LastOfCombination()) Click();
+                        else if (!StopPlayerWin()) {
+                            if (chosenCombination != null) Click();
+                            else {
+                                this.#cells.every(cell => {
+                                    if (cell.Value == null) {
+                                        cell.ClickByComputer();
+                                        return false;
+                                    }
+                                    return true;
+                                });
                             }
                         }
                         break;
@@ -138,7 +158,6 @@ export class TicTacToeGame extends TicTacToeBase {
         };
         this.#gameData.event = GameHandler;
     }
-    //tutaj
 
     #MainGameHandler() {
         if (this.#CheckWin()) {
@@ -187,7 +206,6 @@ export class TicTacToeGame extends TicTacToeBase {
         this.#gameData.gameStarted = true;
         this.#gameData.crossTurn = this.#lastTurn = !this.#lastTurn;
         this.#ticTacToe.TicTacToeReset.DisablePlayAgain();
-        if (!this.#playerMode && !this.#gameData.crossTurn)
-            this.#cells[Math.floor(Math.random() * this.#cells.length)].ClickByComputer();
+        if (!this.#playerMode && !this.#gameData.crossTurn) this.#gameData.event();
     }
 }

@@ -80,34 +80,27 @@ export class TicTacToeGame extends TicTacToeBase {
             ComputerCombinations();
             if (computerCombinations.length > 0) {
                 chosenCombination = ChooseBestCombination(circles, 2);
-                if (chosenCombination == null) chosenCombination = computerCombinations[Math.floor(Math.random() * computerCombinations.length)];
+                if (chosenCombination === null) chosenCombination = computerCombinations[Math.floor(Math.random() * computerCombinations.length)];
             }
             else chosenCombination = null;
         };
-        //tutaj
         const Click = () => {
-            //tutaj
-            if (chosenCombination === null) throw Error("eee kurwa puste joł")
-            //tutaj
+            if (chosenCombination === null) return;
             let position = Math.floor(Math.random() * chosenCombination.length);
             while (this.#cells[chosenCombination[position]].Value !== null)
-                position = Math.floor(Math.random() * chosenCombination.length);
+                position = position == 2 ? 0 : ++position;
             this.#cells[chosenCombination[position]].ClickByComputer();
         };
-        //tutaj
-        //tutaj
-        const LastOfCombination = () => {
+        const LastToClick = () => {
             if (chosenCombination === null) return false;
             let count = 0;
-            if (this.#cells[chosenCombination[0]].Value === null) count++;
-            if (this.#cells[chosenCombination[1]].Value === null) count++;
-            if (this.#cells[chosenCombination[2]].Value === null) count++;
+            for (let i = 0; i < chosenCombination.length; i++)
+                if (this.#cells[chosenCombination[i]].Value === null) count++;
             return count > 1 ? false : true;
-        }
-        //tutaj
-        //tutaj
+        };
         const StopPlayerWin = () => {
             let returnStatus = false;
+            //tutaj
             const playerCells = this.#cells.filter(cell => cell.Value === true).map(cell => cell.Index);
             this.#gameWinningCombinations.every(comb => {
                 if (returnStatus) return false;
@@ -121,9 +114,9 @@ export class TicTacToeGame extends TicTacToeBase {
                 }
                 return true;
             });
+            //tutaj
             return returnStatus;
         };
-        //tutaj
         const GameHandler = () => {
             this.#MainGameHandler();
             if (this.#gameData.gameStarted && !this.#gameData.crossTurn) {
@@ -138,12 +131,12 @@ export class TicTacToeGame extends TicTacToeBase {
                         if (!StopPlayerWin()) Click();
                         break;
                     default:
-                        if (LastOfCombination()) Click();
+                        if (LastToClick()) Click();
                         else if (!StopPlayerWin()) {
-                            if (chosenCombination != null) Click();
+                            if (chosenCombination !== null) Click();
                             else {
                                 this.#cells.every(cell => {
-                                    if (cell.Value == null) {
+                                    if (cell.Value === null) {
                                         cell.ClickByComputer();
                                         return false;
                                     }
@@ -192,7 +185,7 @@ export class TicTacToeGame extends TicTacToeBase {
 
     #CheckDraw() {
         for (let i = 0; i < this.#cells.length; i++)
-            if (this.#cells[i].Value == null) return false;
+            if (this.#cells[i].Value === null) return false;
         return true;
     }
 

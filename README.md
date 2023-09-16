@@ -3,7 +3,9 @@ TicTacToe created by Patryk 'UltiPro' Wójtowicz using JavaScript.
 
 Tic tac toe game written in JavaScript. Game offers two modes. Player mode which allows to play by two players and computer mode which allows to play against computer. Game has scoreboard. Reset button changes mode and resets scoreboard. Play again button starts game again.
 
-Link to game: [link](https://ultipro.github.io/TicTacToe/)
+# Usage
+
+Link to game: [click](https://ultipro.github.io/TicTacToe/)
 
 # Preview
 
@@ -18,3 +20,7 @@ Link to game: [link](https://ultipro.github.io/TicTacToe/)
     <img src="./screenshots/Game5.jpg" alt="Game preview 5" width="200">
     <img src="./screenshots/Game6.jpg" alt="Game preview 6" width="200">
 </p>
+
+![Game preview player](/screenshots/GameComputer.gif)
+
+![Game preview computer](/screenshots/GamePlayer.gif)

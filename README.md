@@ -22,7 +22,7 @@ Link to game: [click](https://ultipro.github.io/TicTacToe/)
 </p>
 
 ### Game by two players:
-<img src="./screenshots/GameComputer.gif" alt="Game player preview">
+<img src="./screenshots/GamePlayer.gif" alt="Game player preview">
 
 ### Game against computer:
-<img src="./screenshots/GamePlayer.gif" alt="Game computer preview">
+<img src="./screenshots/GameComputer.gif" alt="Game computer preview">

@@ -20,8 +20,8 @@ export class TicTacToeReset extends TicTacToeBase {
             <button class="button-small">Reset Game</button>
         `;
         this.#mainDiv.append(resetBox);
-        this.#playAgainBtn = document.querySelector(".reset-box button:nth-child(1)");
-        document.querySelector(".reset-box button:nth-child(2)").addEventListener("click", () => location.reload());
+        this.#playAgainBtn = resetBox.querySelector("button:nth-child(1)");
+        resetBox.querySelector("button:nth-child(2)").addEventListener("click", () => location.reload());
         this._SetInited();
     }
 
